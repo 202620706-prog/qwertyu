@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>용접 장인의 길 | 산업설비과 프리미엄 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@200;300;400;500;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#05070b; --ink:#0b1018;
+    --panel:rgba(255,255,255,.035);
+    --line:rgba(255,255,255,.09);
+    --gold:#e8b23a; --gold2:#f6d47c;
+    --flame:#ff5a1f; --ice:#5ad1ff;
+    --text:#eef2f7; --sub:#94a3b8;
+  }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-serif; overflow-x:hidden; }
+  /* 금속 노이즈 질감 오버레이 */
+  body::after { content:''; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
+  /* 장식 구분선 */
+  .ornament { display:flex; align-items:center; justify-content:center; gap:18px; margin:0 auto 60px; max-width:520px; }
+  .ornament .bar { flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .ornament .gem { width:9px; height:9px; transform:rotate(45deg); border:1px solid var(--gold);
+    box-shadow:0 0 14px rgba(232,178,58,.5); background:rgba(232,178,58,.25); }
+  .ornament .core { font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:6px; color:var(--gold);
+    text-shadow:0 0 14px rgba(232,178,58,.4); }
+  /* 각인 섹션 번호 워터마크 */
+  .method .wm { position:absolute; right:14px; top:2px; font-family:'Black Han Sans',sans-serif;
+    font-size:110px; color:rgba(255,255,255,.035); line-height:1; user-select:none; pointer-events:none; }
+  /* 히어로 아크 링 */
+  .arc-ring { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(78vw,720px); aspect-ratio:1; border-radius:50%; pointer-events:none;
+    border:1px solid rgba(232,178,58,.14); animation:arcSpin 40s linear infinite; }
+  .arc-ring::before, .arc-ring::after { content:''; position:absolute; border-radius:50%; inset:-34px;
+    border:1px dashed rgba(255,255,255,.06); }
+  .arc-ring::after { inset:44px; border:1px solid rgba(90,209,255,.10); animation:arcSpin 28s linear reverse infinite; }
+  .arc-ring .node { position:absolute; top:-5px; left:50%; width:10px; height:10px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 22px 6px rgba(255,90,31,.55), 0 0 60px 18px rgba(255,90,31,.18);
+    animation:flicker 3s infinite; }
+  @keyframes arcSpin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+  @keyframes flicker { 0%,100%{opacity:1;} 8%{opacity:.4;} 10%{opacity:1;} 55%{opacity:.75;} 60%{opacity:1;} }
+  ::-webkit-scrollbar { width:10px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:linear-gradient(var(--gold),var(--flame)); border-radius:5px; }
+  ::selection { background:var(--gold); color:#000; }
+
+  /* ================= HERO ================= */
+  .hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+    text-align:center; position:relative; padding:60px 20px 80px; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse 70% 45% at 50% 115%, rgba(255,90,31,.22), transparent 65%),
+               radial-gradient(ellipse 50% 35% at 15% 10%, rgba(232,178,58,.08), transparent 60%),
+               radial-gradient(ellipse 50% 35% at 85% 5%, rgba(90,209,255,.07), transparent 60%); }
+  .grid-bg { position:absolute; inset:0; opacity:.5;
+    background-image:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:70px 70px;
+    mask-image:radial-gradient(ellipse 75% 65% at 50% 45%, #000 30%, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 75% 65% at 50% 45%, #000 30%, transparent 75%); }
+
+  .hero-kicker { font-family:'Orbitron',sans-serif; letter-spacing:8px; font-size:12px; color:var(--ice);
+    display:flex; align-items:center; gap:16px; margin-bottom:28px; text-transform:uppercase; }
+  .hero-kicker::before, .hero-kicker::after { content:''; width:60px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--ice)); }
+  .hero-kicker::after { background:linear-gradient(90deg,var(--ice),transparent); }
+
+  h1.hero-title { font-family:'Black Han Sans',sans-serif; font-size:clamp(46px,10vw,110px); line-height:1.05;
+    letter-spacing:-1px; }
+  h1 .line1 { display:block; color:#fff; }
+  h1 .line2 { display:block; background:linear-gradient(92deg,var(--flame) 10%, var(--gold2) 50%, var(--gold) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 40px rgba(255,90,31,.4)); }
+  .hero-sub { margin-top:26px; max-width:620px; color:var(--sub); font-weight:300; font-size:17px; line-height:1.9; }
+  .hero-sub b { color:var(--gold2); font-weight:500; }
+
+  .hero-cta { margin-top:44px; display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .btn { font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:15px; text-decoration:none;
+    padding:16px 38px; border-radius:4px; transition:.3s; letter-spacing:1px; }
+  .btn-gold { background:linear-gradient(120deg,var(--gold),var(--gold2)); color:#131108;
+    box-shadow:0 10px 30px rgba(232,178,58,.25); }
+  .btn-gold:hover { transform:translateY(-3px); box-shadow:0 16px 40px rgba(232,178,58,.4); }
+  .btn-ghost { border:1px solid var(--line); color:var(--text); }
+  .btn-ghost:hover { border-color:var(--ice); color:var(--ice); transform:translateY(-3px); }
+
+  .scroll-hint { position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    color:var(--sub); font-size:11px; letter-spacing:4px; font-family:'Orbitron',sans-serif; }
+  .scroll-hint::after { content:''; display:block; width:1px; height:44px; margin:12px auto 0;
+    background:linear-gradient(var(--gold),transparent); animation:drip 2s ease-in-out infinite; }
+  @keyframes drip { 0%{transform:scaleY(0);transform-origin:top;} 50%{transform:scaleY(1);transform-origin:top;}
+    51%{transform-origin:bottom;} 100%{transform:scaleY(0);transform-origin:bottom;} }
+
+  /* ================= NAV ================= */
+  nav { position:sticky; top:0; z-index:100; display:flex; justify-content:center; align-items:center; flex-wrap:wrap;
+    gap:6px; padding:0 16px; background:rgba(5,7,11,.8); backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line); height:62px; }
+  .nav-logo { font-family:'Orbitron',sans-serif; font-weight:900; font-size:14px; letter-spacing:3px;
+    color:var(--gold); margin-right:18px; display:flex; align-items:center; gap:8px; }
+  .nav-logo .dot { width:8px; height:8px; border-radius:50%; background:var(--flame);
+    box-shadow:0 0 12px var(--flame); animation:blink 1.6s infinite; }
+  @keyframes blink { 50%{opacity:.3;} }
+  nav a { text-decoration:none; color:var(--sub); font-size:13.5px; font-weight:500; padding:8px 16px;
+    border-radius:3px; transition:.25s; letter-spacing:.5px; }
+  nav a:hover { color:var(--gold2); text-shadow:0 0 12px rgba(232,178,58,.5); }
+
+  /* ================= LAYOUT ================= */
+  .wrap { max-width:1080px; margin:0 auto; padding:90px 22px; }
+  .sec-head { margin-bottom:44px; }
+  .sec-eyebrow { font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:6px; color:var(--ice);
+    text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:14px; }
+  .sec-eyebrow::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--line),transparent); }
+  h2.sec-title { font-family:'Black Han Sans',sans-serif; font-size:clamp(28px,4.5vw,42px); color:#fff; }
+  h2 .accent { color:var(--gold); }
+  .sec-desc { margin-top:14px; color:var(--sub); font-weight:300; line-height:1.9; max-width:640px; }
+  .sec-desc b { color:var(--text); font-weight:500; }
+
+  /* 공법 카드 */
+  .method { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:44px 40px;
+    margin-bottom:70px; position:relative; backdrop-filter:blur(6px); }
+  .method::before, .method::after { content:''; position:absolute; width:26px; height:26px; border:2px solid var(--gold); }
+  .method::before { top:-2px; left:-2px; border-right:none; border-bottom:none; }
+  .method::after { bottom:-2px; right:-2px; border-left:none; border-top:none; }
+  .method-head { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
+  .method-head h3 { font-family:'Black Han Sans',sans-serif; font-size:26px; }
+  .method-head .code { font-family:'Orbitron',sans-serif; font-size:12px; color:var(--ice); letter-spacing:2px;
+    border:1px solid rgba(90,209,255,.35); padding:3px 12px; border-radius:20px; }
+  .method-head .use { color:var(--sub); font-size:13px; margin-left:auto; }
+  .method-desc { color:var(--sub); font-weight:300; line-height:1.85; margin-bottom:26px; }
+  .method-desc b { color:var(--gold2); font-weight:500; }
+
+  .spec-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:780px){ .spec-grid{grid-template-columns:1fr;} .method{padding:30px 22px;} .wrap{padding:60px 18px;} }
+  .spec { background:rgba(0,0,0,.28); border:1px solid var(--line); border-radius:6px; padding:26px; }
+  .spec h4 { font-size:15px; color:var(--gold2); margin-bottom:16px; letter-spacing:1px;
+    display:flex; align-items:center; gap:10px; }
+  .spec h4::before { content:''; width:4px; height:16px; background:linear-gradient(var(--flame),var(--gold)); border-radius:2px; }
+  ul.specs, ol.steps { list-style:none; margin:0; line-height:2.05; font-size:14.5px; color:#c6d2e0; font-weight:300; }
+  ul.specs li::before { content:'—'; color:var(--gold); margin-right:10px; font-weight:700; }
+  ol.steps { counter-reset:st; }
+  ol.steps li { counter-increment:st; padding-left:34px; position:relative; }
+  ol.steps li::before { content:counter(st,decimal-leading-zero); position:absolute; left:0; top:1px;
+    font-family:'Orbitron',sans-serif; font-size:12px; color:var(--ice); }
+  li b { color:#fff; font-weight:500; }
+  li .hl { color:var(--gold2); font-weight:500; }
+
+  .note { margin-top:22px; border-left:3px solid var(--gold); background:linear-gradient(90deg, rgba(232,178,58,.09), transparent 70%);
+    padding:16px 20px; font-size:14.5px; line-height:1.8; color:#d8d2c0; font-weight:300; }
+  .note b { color:var(--gold2); font-weight:500; }
+  .note.danger { border-color:var(--flame); background:linear-gradient(90deg, rgba(255,90,31,.09), transparent 70%); }
+
+  /* ================= 전류표 ================= */
+  .amp-tables { display:grid; gap:40px; }
+  .amp-block h4 { font-family:'Orbitron',sans-serif; font-size:14px; letter-spacing:3px; color:var(--ice);
+    margin-bottom:16px; text-transform:uppercase; }
+  .amp-block h4 span { color:var(--sub); letter-spacing:0; font-family:'Noto Sans KR'; font-weight:300; }
+  table { width:100%; border-collapse:collapse; font-size:14.5px; border:1px solid var(--line); }
+  thead th { background:rgba(232,178,58,.1); color:var(--gold2); font-weight:500; padding:14px 10px;
+    text-align:center; letter-spacing:1px; border-bottom:1px solid var(--line); font-size:13.5px; }
+  tbody td { padding:15px 10px; text-align:center; border-bottom:1px solid rgba(255,255,255,.05);
+    color:#c6d2e0; font-weight:300; }
+  tbody tr { transition:.2s; }
+  tbody tr:hover { background:rgba(90,209,255,.05); }
+  .t-plate { font-family:'Orbitron',sans-serif; font-weight:700; color:#fff; }
+  .t-amp { font-family:'Orbitron',sans-serif; font-weight:700; color:var(--gold);
+    text-shadow:0 0 14px rgba(232,178,58,.4); }
+  .t-amp small { font-family:'Noto Sans KR'; color:var(--sub); font-weight:300; }
+
+  /* ================= 꿀팁 ================= */
+  .tips-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+  .tip-card { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:28px; transition:.3s; }
+  .tip-card:hover { border-color:var(--gold); transform:translateY(-4px); box-shadow:0 20px 50px rgba(0,0,0,.5); }
+  .tip-num { font-family:'Orbitron',sans-serif; font-size:13px; color:var(--flame); margin-bottom:12px; letter-spacing:2px; }
+  .tip-card h4 { font-size:17px; margin-bottom:12px; color:#fff; }
+  .tip-card p { color:var(--sub); font-weight:300; font-size:14.5px; line-height:1.85; }
+  .tip-card p b { color:var(--gold2); font-weight:500; }
+
+  .fault-table td { text-align:left; padding:13px 16px; }
+  .fault-table td:first-child { color:var(--flame); font-weight:500; white-space:nowrap; }
+
+  /* ================= 안전 ================= */
+  .safety-band { border:1px solid rgba(255,90,31,.35); background:linear-gradient(160deg, rgba(255,90,31,.1), rgba(255,90,31,.02));
+    border-radius:6px; padding:34px; }
+  .safety-band ul { list-style:none; margin:0; columns:2; column-gap:44px; font-size:14.5px; font-weight:300; color:#d3dae4; }
+  @media (max-width:700px){ .safety-band ul{columns:1;} }
+  .safety-band li { padding:9px 0 9px 30px; position:relative; break-inside:avoid; line-height:1.7; }
+  .safety-band li::before { content:'⚠'; position:absolute; left:0; color:var(--flame); }
+  .safety-band li b { color:#fff; font-weight:500; }
+
+  /* ================= 푸터 ================= */
+  footer { border-top:1px solid var(--line); text-align:center; padding:70px 20px; }
+  .f-logo { font-family:'Orbitron',sans-serif; letter-spacing:6px; font-size:15px; color:var(--gold); }
+  .f-sub { color:var(--sub); font-weight:300; font-size:13px; margin-top:14px; line-height:1.9; }
+
+  /* 스크롤 등장 */
+  .reveal { opacity:0; transform:translateY(36px); transition:opacity .8s cubic-bezier(.2,.7,.3,1), transform .8s cubic-bezier(.2,.7,.3,1); }
+  .reveal.on { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="arc-ring"><span class="node"></span></div>
+  <div class="grid-bg"></div>
+  <div class="hero-kicker">Industrial Equipment Dept.</div>
+  <h1 class="hero-title">
+    <span class="line1">불꽃을 다루는</span>
+    <span class="line2">장인의 기술서</span>
+  </h1>
+  <p class="hero-sub">
+    TIG · CO2 · 피복아크 — 세 가지 용접 공법의 셋팅과 기술,<br>
+    <b>6T / 9T 판두께별 전류</b>와 현장에서 검증된 노하우까지.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-gold" href="#current">전류표 바로 보기</a>
+    <a class="btn btn-ghost" href="#tips">꿀팁 열람</a>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <span class="nav-logo"><span class="dot"></span>WELD·CODE</span>
+  <a href="#tig">TIG</a>
+  <a href="#co2">CO2</a>
+  <a href="#smaw">SMAW</a>
+  <a href="#current">6T·9T 전류</a>
+  <a href="#tips">꿀팁</a>
+  <a href="#safety">안전</a>
+</nav>
+
+<div class="wrap">
+
+<div class="ornament"><span class="bar"></span><span class="core">TECHNIQUE</span><span class="gem"></span><span class="bar"></span></div>
+
+<!-- ═══════════ TIG ═══════════ -->
+<section class="method reveal" id="tig"><span class="wm">01</span>
+  <div class="method-head">
+    <h3>TIG 용접</h3>
+    <span class="code">GTAW</span>
+    <span class="use">스테인리스 · 배관 · 루트 전담</span>
+  </div>
+  <p class="method-desc">
+    텅스텐 전극과 아르곤 가스로 만드는 <b>최고 품질의 용접</b>. 불꽃 없이 순수한 아크만으로
+    용융풀을 조종한다. 비드가 예쁜 TIG 용접사는 어디서나 대접받는다.
+  </p>
+  <div class="spec-grid">
+    <div class="spec">
+      <h4>기본 셋팅</h4>
+      <ul class="specs">
+        <li>전류 <span class="hl">DCSP (직류 정극성)</span></li>
+        <li>텅스텐 <b>2.4mm</b> (2% 세륨 / 토륨)</li>
+        <li>가스 순 아르곤 <span class="hl">8~12 L/min</span></li>
+        <li>아크 길이 <b>2~3mm</b> — 최대한 짧게</li>
+        <li>노즐–모재 거리 5~10mm</li>
+      </ul>
+    </div>
+    <div class="spec">
+      <h4>작업 순서</h4>
+      <ol class="steps">
+        <li>푸터 페달로 아크 발생 및 전류 조절</li>
+        <li>토치를 <b>75~80°</b> 기울여 진행</li>
+        <li>필러봉을 용융풀 <b>앞쪽에 규칙적</b>으로 투입</li>
+        <li>속도 일정 → 용융풀 크기 일정 유지</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">
+    루트(뿌리)용접은 <b>퓨전법</b> — 필러 없이 두 모재를 스스로 융합시키면 뒷면 비드가 완벽하게 나온다.
+    텅스텐이 모재에 닿는 <b>텅스텐 오염</b>은 즉시 재연마해야 한다.
+  </div>
+</section>
+
+<!-- ═══════════ CO2 ═══════════ -->
+<section class="method reveal" id="co2"><span class="wm">02</span>
+  <div class="method-head">
+    <h3>CO2 용접</h3>
+    <span class="code">시오투 · GMAW / FCAW</span>
+    <span class="use">산업설비 · 철구조물 주력</span>
+  </div>
+  <p class="method-desc">
+    반자동 용접의 왕. <b>작업 속도가 빠르고</b> 다루기 쉬워 현장 생산성의 핵심.
+    전류와 전압의 균형을 소리로 듣는 것이 실력의 시작이다.
+  </p>
+  <div class="spec-grid">
+    <div class="spec">
+      <h4>기본 셋팅</h4>
+      <ul class="specs">
+        <li>와이어 <b>1.2mm</b> (KM-71 계열)</li>
+        <li>가스 CO2 또는 Ar80+CO2, 유량 <span class="hl">15~20 L/min</span></li>
+        <li>전류 200~280A / 전압 24~30V</li>
+        <li>스틱아웃(돌출길이) <b>15~20mm</b></li>
+      </ul>
+    </div>
+    <div class="spec">
+      <h4>작업 순서</h4>
+      <ol class="steps">
+        <li>소리로 판정 — "지직~" 날카로우면 <b>전압 상향</b>, "퉁퉁" 둔하면 <b>전압 하향</b></li>
+        <li>진행각 <b>10~15°</b> 기울여 이동</li>
+        <li>얇은 판은 직선, 두꺼운 판은 <b>지그재그 · 반달</b> 운봉</li>
+        <li>용융풀 앞 1/3 지점을 응시하며 진행</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">
+    스패터가 심할 때 3단 체크: ① 전압 부족 ② 가스 유량 부족 또는 바람 유입 ③ 스틱아웃 과다.
+    노즐에는 미리 스패터 방지 스프레이를 뿌려둔다.
+  </div>
+</section>
+
+<!-- ═══════════ SMAW ═══════════ -->
+<section class="method reveal" id="smaw"><span class="wm">03</span>
+  <div class="method-head">
+    <h3>피복아크 용접</h3>
+    <span class="code">SMAW · 스마</span>
+    <span class="use">야외 · 현장 · 루트 전담</span>
+  </div>
+  <p class="method-desc">
+    모든 용접의 뿌리. 장비가 단순하고 <b>바람에 강해</b> 야외 작업의 유일한 해답.
+    용접사의 기본기를 가늠하는 척도다.
+  </p>
+  <div class="spec-grid">
+    <div class="spec">
+      <h4>기본 셋팅</h4>
+      <ul class="specs">
+        <li>전극 <b>3.2mm</b> (일반) / <b>2.6mm</b> (루트·얇은 판)</li>
+        <li>3.2mm → <span class="hl">90~130A</span></li>
+        <li>2.6mm → 60~90A</li>
+        <li>아크 길이 = 전극 지름 수준</li>
+      </ul>
+    </div>
+    <div class="spec">
+      <h4>작업 순서</h4>
+      <ol class="steps">
+        <li>스트라이크(성냥책기)로 아크 발생</li>
+        <li>토치각 <b>70~80°</b>, 아크 길이 일정 유지</li>
+        <li>느리면 과다중첩, 빠르면 언더컷</li>
+        <li>마무리는 잠깐 뒤로 → <b>크레이터 방지</b></li>
+      </ol>
+    </div>
+  </div>
+  <div class="note danger">
+    전극이 달라붙는 <b>스터브</b>는 전류 부족 신호다. 저수소계 전극(LB-52U 등)은
+    <b>반드시 건조기에 보관</b> — 습기 흡수만으로 기공 불량이 발생한다.
+  </div>
+</section>
+
+<!-- ═══════════ 전류표 ═══════════ -->
+<section class="reveal" id="current" style="margin-bottom:70px;">
+  <div class="sec-head">
+    <div class="sec-eyebrow">Amperage Standards</div>
+    <h2 class="sec-title">6T · 9T <span class="accent">판두께별 전류</span></h2>
+    <p class="sec-desc">T = 두께(mm). <b>6T는 6mm, 9T는 9mm</b> 판이다. 자격시험과 실습 평가의 단골 기준값이니 통째로 암기하자.</p>
+  </div>
+  <div class="amp-tables">
+    <div class="amp-block">
+      <h4>TIG — GTAW <span>/ 텅스텐 · 아르곤</span></h4>
+      <table>
+        <thead><tr><th>판두께</th><th>텅스텐</th><th>전류 (DC)</th><th>필러봉</th><th>패스</th></tr></thead>
+        <tbody>
+          <tr><td class="t-plate">6T <small>6mm</small></td><td>2.4mm</td><td class="t-amp">110 ~ 140 A</td><td>2.4mm ER70S / ER308L</td><td>2~3단</td></tr>
+          <tr><td class="t-plate">9T <small>9mm</small></td><td>2.4mm</td><td class="t-amp">140 ~ 180 A</td><td>2.4mm ER70S / ER308L</td><td>3~4단</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="amp-block">
+      <h4>CO2 — GMAW / FCAW <span>/ 1.2mm 와이어</span></h4>
+      <table>
+        <thead><tr><th>판두께</th><th>와이어</th><th>전류</th><th>전압</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="t-plate">6T <small>6mm</small></td><td>1.2mm</td><td class="t-amp">180 ~ 220 A</td><td>24 ~ 26 V</td><td>1~2단 · 지그재그</td></tr>
+          <tr><td class="t-plate">9T <small>9mm</small></td><td>1.2mm</td><td class="t-amp">220 ~ 260 A</td><td>26 ~ 29 V</td><td>2~3단 · 루트+캡</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="amp-block">
+      <h4>SMAW — 피복아크 <span>/ 전극 3.2mm 기준</span></h4>
+      <table>
+        <thead><tr><th>판두께</th><th>전극</th><th>전류</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="t-plate">6T <small>6mm</small></td><td>3.2mm</td><td class="t-amp">100 ~ 130 A</td><td>루트 2.6mm (70~90A) 후 덧대</td></tr>
+          <tr><td class="t-plate">9T <small>9mm</small></td><td>3.2mm</td><td class="t-amp">110 ~ 140 A</td><td>3~4단 · 층간 슬래그 완전 제거</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note danger" style="margin-top:30px;">
+    수직 · 상향 자세는 표준 전류에서 <b>10~20% 낮춘다</b>. 무시하면 용융풀이 중력을 이기지 못하고 흘러내린다.
+  </div>
+</section>
+
+<!-- ═══════════ 꿀팁 ═══════════ -->
+<section class="reveal" id="tips" style="margin-bottom:70px;">
+  <div class="sec-head">
+    <div class="sec-eyebrow">Field Techniques</div>
+    <h2 class="sec-title">현장 <span class="accent">꿀팁</span></h2>
+    <p class="sec-desc">선배 용접사들이 몸으로 배운 노하우. 이것만 알아도 실습 평가가 달라진다.</p>
+  </div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-num">TIP — 01</div>
+      <h4>전류가 반이다</h4>
+      <p>비드가 높고 좁으면 <b>전류 부족</b>, 언더컷이 생기면 <b>전류 과다</b>. 비드 모양과 소리로 전류를 판단하는 귀와 눈이 실력이다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 02</div>
+      <h4>한 손은 반드시 고정</h4>
+      <p>손목을 모재나 지그에 대고 용접하면 손떨림이 사라져 <b>비드가 기계처럼 일정</b>해진다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 03</div>
+      <h4>자세가 80%</h4>
+      <p>눈–토치 거리 <b>20~25cm</b> 확보, 렌즈는 <b>#10~12</b>. 시야가 불안하면 용접도 불안하다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 04</div>
+      <h4>용융풀 앞을 본다</h4>
+      <p>아크 자체가 아니라 <b>아크 앞쪽의 용융풀</b>을 보며 진행해야 갭 흡수와 속도 조절이 쉬워진다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 05</div>
+      <h4>갭이 크면 파인드</h4>
+      <p>루트 갭이 벌어졌을 땐 좌우로 흔들며 철워넣기. <b>3mm 이상</b>이면 태비 용접으로 메우고 시작한다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 06</div>
+      <h4>층간 관리가 품질</h4>
+      <p>다음 층 전 <b>슬래그 완전 제거</b>, 모재 온도 <b>150°C 이하</b> 확인. 급하면 기공이 따라온다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 07</div>
+      <h4>수직은 아래→위</h4>
+      <p>좌우 <b>반달 운봉</b>으로 올라가고, 용융풀이 늘어지면 운봉 속도를 빠르게. 아래→위 방향이 원칙.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">TIP — 08</div>
+      <h4>두꺼운 판은 예열</h4>
+      <p><b>100~150°C 예열</b>로 급랭을 막으면 균열 위험이 사라진다. 서두르지 않는 것이 가장 빠른 길.</p>
+    </div>
+  </div>
+
+  <div class="amp-block" style="margin-top:44px;">
+    <h4>Troubleshooting <span>/ 불량 원인과 처방</span></h4>
+    <table class="fault-table">
+      <thead><tr><th>불량</th><th>원인</th><th>처방</th></tr></thead>
+      <tbody>
+        <tr><td>기공</td><td>가스 유량 부족 · 습한 전극 · 표면 오염</td><td>유량 점검 · 전극 건조 · 그라인딩</td></tr>
+        <tr><td>언더컷</td><td>전류 과다 · 진행 속도 과다</td><td>전류·속도 하향</td></tr>
+        <tr><td>융합불량</td><td>전류 부족 · 아크 길이 과다</td><td>전류 상향 · 아크 길이 단축</td></tr>
+        <tr><td>스패터</td><td>전압–전류 불균형 · 가스 문제</td><td>전압 상향 · 가스 유량 점검</td></tr>
+        <tr><td>균열</td><td>예열 부족 · 급랭</td><td>100~150°C 예열 · 서냉</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 안전 ═══════════ -->
+<section class="reveal" id="safety" style="margin-bottom:40px;">
+  <div class="sec-head">
+    <div class="sec-eyebrow">Safety First</div>
+    <h2 class="sec-title">안전수칙 <span class="accent">— 생명 우선</span></h2>
+  </div>
+  <div class="safety-band">
+    <ul>
+      <li><b>면진 헬멧 · 앞치마 · 용접장갑 · 안전화</b> 착용은 협상 불가</li>
+      <li>아크광선은 눈과 피부를 태운다 — <b>방광막 · 커튼</b> 설치</li>
+      <li>용접 흄 흡입 금지 — <b>국소배기 · 환기</b> 확보</li>
+      <li>밀폐공간은 <b>산소결핍 · 가스 검지</b> 먼저</li>
+      <li>작업 전 <b>가연물 제거</b> 및 소화기 위치 확인</li>
+      <li>전기기계 <b>접지 필수</b> — 감전사고 주의</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="ornament" style="margin-bottom:34px;"><span class="bar"></span><span class="gem"></span><span class="bar"></span></div>
+  <div class="f-logo">WELD·CODE</div>
+  <p class="f-sub">불꽃을 다루는 장인의 기술서 · 부기공 산업설비과<br>
+  실습 전 반드시 담당 선생님의 지시를 따르세요.</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
